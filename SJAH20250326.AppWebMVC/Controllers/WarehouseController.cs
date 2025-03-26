@@ -19,9 +19,26 @@ namespace SJAH20250326.AppWebMVC.Controllers
         }
 
         // GET: Warehouse
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Warehouse warehousename, int topRegistro = 10)
         {
-            return View(await _context.Warehouses.ToListAsync());
+            var query = _context.Warehouses.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(warehousename.WarehouseName))
+            {
+                query = query.Where(w => w.WarehouseName.Contains(warehousename.WarehouseName));
+            }
+
+            if (topRegistro > 0)
+            {
+                query = query.Take(topRegistro);
+            }
+
+            var warehouses = _context.Warehouses.ToList(); 
+            warehouses.Add(new Warehouse { WarehouseName = "SELECCIONAR", Id = 0 });
+            ViewData["Warehouses"] = new SelectList(warehouses, "Id", "Warehousename", 0);
+
+
+            return View(await query.ToListAsync());
         }
 
         // GET: Warehouse/Details/5

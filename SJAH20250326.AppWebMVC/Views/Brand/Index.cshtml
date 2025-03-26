@@ -4,7 +4,59 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>MARCAS</h1>
+<form asp-action="Index">
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label class="control-label">Marca</label>
+                <input type="text" name="brandname" class="form-control" />
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="form-group">
+                <label class="control-label">Pais</label>
+                <textarea name="country" class="form-control"></textarea>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label class="control-label">Marcas</label>
+                <select name="BrandName" class="form-control" asp-items="ViewBag.BrandName"></select>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label class="control-label">marcas</label>
+                <select name="Country" class="form-control" asp-items="ViewBag.Country"></select>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label class="control-label">Cant. Registros</label>
+                <select name="topRegistro" class="form-control">
+                    <option selected value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="60">60</option>
+                    <option value="100">100</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                    <option value="0">Todos</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <input type="submit" value="Buscar" class="btn btn-primary" />
+            <a class="btn btn-info" asp-action="Create">Ir a crear</a>
+        </div>
+    </div>
+</form>
+
 
 <p>
     <a asp-action="Create">Create New</a>
