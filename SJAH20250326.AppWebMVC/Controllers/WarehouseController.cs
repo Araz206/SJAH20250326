@@ -19,13 +19,13 @@ namespace SJAH20250326.AppWebMVC.Controllers
         }
 
         // GET: Warehouse
-        public async Task<IActionResult> Index(Warehouse warehousename, int topRegistro = 10)
+        public async Task<IActionResult> Index(Warehouse bodega, int topRegistro = 10)
         {
             var query = _context.Warehouses.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(warehousename.WarehouseName))
+            if (!string.IsNullOrWhiteSpace(bodega.WarehouseName))
             {
-                query = query.Where(w => w.WarehouseName.Contains(warehousename.WarehouseName));
+                query = query.Where(w => w.WarehouseName.Contains(bodega.WarehouseName));
             }
 
             if (topRegistro > 0)
@@ -33,9 +33,11 @@ namespace SJAH20250326.AppWebMVC.Controllers
                 query = query.Take(topRegistro);
             }
 
-            var warehouses = _context.Warehouses.ToList(); 
-            warehouses.Add(new Warehouse { WarehouseName = "SELECCIONAR", Id = 0 });
-            ViewData["Warehouses"] = new SelectList(warehouses, "Id", "Warehousename", 0);
+
+            var warehouse = _context.Warehouses.ToList(); 
+            //warehouse.Add(new Warehouse { WarehouseName = "SELECCIONAR", Id = 0 });
+            ViewData["Bodega"] = new SelectList(warehouse, "Id", "WarehouseName", 0);
+            
 
 
             return View(await query.ToListAsync());
@@ -62,13 +64,14 @@ namespace SJAH20250326.AppWebMVC.Controllers
         // GET: Warehouse/Create
         public IActionResult Create()
         {
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "Id", "Id");
             return View();
         }
 
-        // POST: Warehouse/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+            // POST: Warehouse/Create
+            // To protect from overposting attacks, enable the specific properties you want to bind to.
+            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,WarehouseName")] Warehouse warehouse)
         {
@@ -78,7 +81,9 @@ namespace SJAH20250326.AppWebMVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(warehouse);
+            ViewData["WarehouseName"] = new SelectList(_context.Warehouses, "Id", "WarehouseName");
+
+            return View();
         }
 
         // GET: Warehouse/Edit/5
@@ -94,6 +99,8 @@ namespace SJAH20250326.AppWebMVC.Controllers
             {
                 return NotFound();
             }
+       
+
             return View(warehouse);
         }
 
